@@ -1,0 +1,240 @@
+#!/bin/bash
+function create_project(){
+	PROJECT_NAME=$1
+
+	if [[ -d "$PROJECT_NAME" ]]; then
+		echo
+		echo "Project $PROJECT_NAME already exists."
+		echo
+		exit 1
+	fi
+
+	if ! [[ -d "$PROJECT_NAME" ]]; then
+		mkdir "$PROJECT_NAME"
+		touch "$PROJECT_NAME/setup.py"
+		mkdir "$PROJECT_NAME/$PROJECT_NAME"
+		mkdir "$PROJECT_NAME/$PROJECT_NAME/bin"
+		touch "$PROJECT_NAME/$PROJECT_NAME/__init__.py"
+		touch "$PROJECT_NAME/$PROJECT_NAME/config.py"
+		mkdir "$PROJECT_NAME/$PROJECT_NAME/authorization"
+		touch "$PROJECT_NAME/$PROJECT_NAME/authorization/__init__.py"
+		mkdir "$PROJECT_NAME/$PROJECT_NAME/css"
+		touch "$PROJECT_NAME/$PROJECT_NAME/css/style.css"
+		mkdir "$PROJECT_NAME/$PROJECT_NAME/sql"
+		touch "$PROJECT_NAME/$PROJECT_NAME/sql/__init__.py"
+		mkdir "$PROJECT_NAME/$PROJECT_NAME/static"
+		mkdir "$PROJECT_NAME/$PROJECT_NAME/static/css"
+		mkdir "$PROJECT_NAME/$PROJECT_NAME/static/images"
+		mkdir "$PROJECT_NAME/$PROJECT_NAME/static/js"
+		mkdir "$PROJECT_NAME/$PROJECT_NAME/templates"
+		mkdir "$PROJECT_NAME/$PROJECT_NAME/views"
+		touch "$PROJECT_NAME/$PROJECT_NAME/views/__init__.py"
+		echo
+		echo "Setup flask project architecture for $PROJECT_NAME."
+		if [[ -x "$(command -v tree)" ]]; then
+			tree "$PROJECT_NAME"
+			echo
+		fi
+	fi
+}
+
+function create_env(){
+	cd $1
+	python3 -m venv env
+	source env/bin/activate
+	pip install --upgrade pip
+	pip install flask
+	cd ../
+	echo
+	echo "Created new environment in project '$1'."
+	echo
+}
+
+case "$1" in
+	"create")
+		if [[ -z "$2" ]]; then
+			echo
+			echo "Usage: create [PROJECT_NAME]"
+			echo
+			exit 1
+		fi
+		create_project "$2"
+		;;
+
+	"create-view")
+		if [[ -z "$2" ]] || [[ -z "$3" ]]; then
+			echo
+			echo "Usage: create-view [PROJECT_NAME] [VIEW_NAME]"
+			echo
+			exit 1
+		fi
+		PROJECT_NAME=$2
+		if ! [[ -d "$PROJECT_NAME" ]]; then
+			echo
+			echo "Unable to locate project $PROJECT_NAME."
+			echo
+			exit 1
+		fi
+		VIEW_NAME=$3
+		NEWFILE="$PROJECT_NAME/$PROJECT_NAME/views/$VIEW_NAME.py"
+		INIT="$PROJECT_NAME/$PROJECT_NAME/views/__init__.py"
+		touch $NEWFILE
+		echo "from $PROJECT_NAME.views.$VIEW_NAME import *" >> $INIT
+		echo
+		echo "Created view $VIEW_NAME..."
+		echo
+		;;
+
+	"create-template")
+		if [[ -z $2 ]] || [[ -z $3 ]]; then
+			echo
+			echo "Usage: create-template [PROJECT_NAME] [TEMPLATE_NAME]"
+			echo
+			exit 1
+		fi
+		PROJECT_NAME=$2
+		if ! [[ -d "$PROJECT_NAME" ]]; then
+			echo
+			echo "Unable to locate project $PROJECT_NAME."
+			echo
+			exit 1
+		fi
+		TEMPLATE_NAME=$3
+		touch "$PROJECT_NAME/$PROJECT_NAME/templates/$TEMPLATE_NAME.html"
+		echo "Created template $TEMPLATE_NAME..."
+		echo
+		;;
+
+	"create-env")
+		if [[ -z $2 ]]; then
+			echo
+			echo "Usage: create-env [PROJECT_NAME]"
+			echo
+			exit 1
+		fi
+		PROJECT_NAME=$2
+		if ! [[ -d "$PROJECT_NAME" ]]; then
+			echo
+			echo "Unable to locate project $PROJECT_NAME."
+			echo
+			exit 1
+		fi
+		if [[ -d "$PROJECT_NAME/env" ]]; then
+			echo
+			echo "Virtual environment already created"
+			echo "To delete run del-env [PROJECT_NAME]"
+			echo "To reset run reset-env [PROJECT_NAME]"
+			echo
+			exit 1
+		fi
+		create_env $PROJECT_NAME
+		;;
+
+	"del-env")
+		if [[ -z $2 ]]; then
+			echo "Usage: del-env [PROJECT_NAME]"
+			exit 1
+		fi
+		PROJECT_NAME=$2
+		if ! [[ -d "$PROJECT_NAME" ]]; then
+			echo "Unable to locate project $PROJECT_NAME."
+			exit 1
+		fi
+		if ! [[ -d "$PROJECT_NAME/env" ]]; then
+			echo
+			echo "No existing environment to delete in project '$PROJECT_NAME'."
+			echo
+			exit 1
+		fi
+		rm -rf "$PROJECT_NAME/env"
+		echo
+		echo "Deleted environment from project $PROJECT_NAME."
+		echo
+		;;
+
+	"reset-env")
+		if [[ -z $2 ]]; then
+			echo "Usage: reset-env [PROJECT_NAME]"
+			exit 1
+		fi
+		PROJECT_NAME=$2
+		if ! [[ -d "$PROJECT_NAME" ]]; then
+			echo "Unable to locate project $PROJECT_NAME."
+			exit 1
+		fi
+		if [[ -d "$PROJECT_NAME/env" ]]; then
+			rm -rf "$PROJECT_NAME/env"
+		fi
+		create_env $PROJECT_NAME
+		;;
+
+	"help")
+		echo
+		echo "************************************************************************************"
+		echo "The Flarchitect framework aims to provide easy, concise, and rapid development"
+		echo "of small Python-Flask projects. To construct a new project, run"
+		echo "./flarchitect create [PROJECT_NAME]"
+		echo
+		echo "This will create a neat directory structure with all the necessary starter"
+		echo "files included for you. It creates a view-template architecture where most"
+		echo "of your python3 code lives in the views/ directory."
+		echo
+		echo "Your routing schemes live in the views/ directory, and your html templates"
+		echo "live in the templates/ directory."
+		echo
+		echo "For a getting started example, take a look at the README!"
+		echo "************************************************************************************"
+		echo
+		;;
+
+	"banner")
+		echo "        ███                         █        █                               
+ ██████   █                         █               █                    █   
+ █        █                         █               █                    █   
+ █        █    ░███░   █▒██▒  ▓██▒  █▒██▒  ███    █████   ███    ▓██▒  █████ 
+ █        █    █▒ ▒█   ██  █ ▓█  ▓  █▓ ▒█    █      █    ▓▓ ▒█  ▓█  ▓    █   
+ ██████   █        █   █     █░     █   █    █      █    █   █  █░       █   
+ █        █    ▒████   █     █      █   █    █      █    █████  █        █   
+ █        █    █▒  █   █     █░     █   █    █      █    █      █░       █   
+ █        █░   █░ ▓█   █     ▓█  ▓  █   █    █      █░   ▓▓  █  ▓█  ▓    █░  
+ █        ▒██  ▒██▒█   █      ▓██▒  █   █  █████    ▒██   ███▒   ▓██▒    ▒██ 
+"
+		;;
+
+	*)
+		echo
+		echo "Usage: 
+		create [PROJECT_NAME],
+		create-view [PROJECT_NAME] [VIEW_NAME],
+		create-template [PROJECT_NAME] [TEMPLATE_NAME],
+		create-env [PROJECT_NAME],
+		del-env [PROJECT_NAME],
+		reset-env [PROJECT_NAME],
+		banner"
+		echo
+		;;
+esac
+
+# destroy project taken out... can be wayyy too fatal
+# "destroy")
+	
+# 	if [[ -z "$2" ]]; then
+# 		echo "Usage: destroy [PROJECT_NAME]"
+# 		exit 1
+# 	fi
+
+# 	if ! [[ -d "$2" ]]; then
+# 		echo "Could not locate project $2"
+# 		exit 1
+# 	fi
+
+# 	if [[ -d "$2" ]]; then
+# 		echo "Destroying project $2..."
+# 		rm -rf "$2"
+# 		if [[ -d "$2" ]]; then
+# 			echo "Could not destroy project $2"
+# 			exit 1
+# 		fi
+# 		echo "Successfully destroyed project $2"
+# 	fi
+# 	;;
