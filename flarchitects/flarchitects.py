@@ -20,7 +20,6 @@ if _type_ == 'view':
     type_name = sys.argv[3]
     source_file = 'flarchitects/view.py'
     file_path = app_name + '/' + app_name + '/views/' + type_name + '.py'
-    print(type_name)
 elif _type_ == 'template':
     template_name = sys.argv[3]
     source_file = 'flarchitects/template.html'

@@ -56,7 +56,7 @@ function create_project(){
 		touch "$INIT_FILE"
 		python3 flarchitects/flarchitects.py "view" "$PROJECT_NAME" "hello_world"
 		echo "from $PROJECT_NAME.views.hello_world import *" >> "$INIT_FILE"
-		echo -e "\nSetup flask project architecture for $PROJECT_NAME."
+		echo -e "\nSetup flask project architecture for project '$PROJECT_NAME'."
 		if [[ -x "$(command -v tree)" ]]; then
 			tree "$PROJECT_NAME"
 			echo -e "\n"
@@ -106,7 +106,7 @@ case "$1" in
 		INIT="$PROJECT_NAME/$PROJECT_NAME/views/__init__.py"
 		touch $NEWFILE
 		echo "from $PROJECT_NAME.views.$VIEW_NAME import *" >> $INIT
-		echo -e "\nCreated view $VIEW_NAME...\n"
+		echo -e "\nCreated view $VIEW_NAME in project '$PROJECT_NAME'...\n"
 		python3 flarchitects/flarchitects.py "view" "$PROJECT_NAME" "$VIEW_NAME"
 		;;
 
