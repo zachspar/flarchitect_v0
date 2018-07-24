@@ -70,8 +70,9 @@ function create_env(){
 	source env/bin/activate
 	pip install --upgrade pip
 	pip install flask
+	pip install -e .
 	cd ../
-	echo -e "\nCreated new environment in project '$1'.\n"
+	echo -e "\nCreated new environment and installed project '$1'.\n"
 }
 
 function install_app(){
@@ -88,7 +89,6 @@ case "$1" in
 			exit 1
 		fi
 		create_project "$2"
-		install_app "$2"
 		;;
 
 	"create-view")
@@ -142,7 +142,6 @@ case "$1" in
 			exit 1
 		fi
 		create_env $PROJECT_NAME
-		install_app $PROJECT_NAME
 		;;
 
 	"del-env")
@@ -177,7 +176,6 @@ case "$1" in
 			rm -rf "$PROJECT_NAME/env"
 		fi
 		create_env $PROJECT_NAME
-		install_app $PROJECT_NAME
 		;;
 
 	"run-debug")
@@ -192,16 +190,11 @@ case "$1" in
 	"help")
 		echo -e "\n************************************************************************************"
 		echo "The Flarchitect framework aims to provide easy, concise, and rapid development"
-		echo "of small Python-Flask projects. To construct a new project, run"
-		echo "./flarchitect create [PROJECT_NAME]"
-		echo
+		echo -e "of small Python-Flask projects.\n"
 		echo "This will create a neat directory structure with all the necessary starter"
-		echo "files included for you. It creates a view-template architecture where most"
-		echo "of your python3 code lives in the views/ directory."
-		echo
+		echo -e "files included for you.\n"
 		echo "Your routing schemes live in the views/ directory, and your html templates"
-		echo "live in the templates/ directory."
-		echo
+		echo -e "live in the templates/ directory.\n"
 		echo "For a getting started example, take a look at the README!"
 		echo -e "************************************************************************************\n"
 		;;

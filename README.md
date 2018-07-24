@@ -8,12 +8,12 @@ _Make sure these dependencies are installed before quickstart_
 3. python3
 
 ## Quickstart:
-_Open new bash shell with pwd as_ `.../flarchitect/`
+_Open new bash shell with pwd as_ `.../flarchitect`
 1. run `chmod +x flarchitect`
-2. now that flarchitect can be executed, lets create a new project called 'test'
-    - run `./flarchitect create test`
-3. create a new python3 virtual environment for `test`
-    - run  `./flarchitect create-env test`
+2. now that flarchitect can be executed, lets create a new project called 'test0'
+    - run `./flarchitect create test0`
+3. create a new python3 virtual environment for `test0`
+    - run  `./flarchitect create-env test0`
 4. serve your flask app
-    - run `./flarchitect run-debug test`
-5. in your browser, navigate to http://127.0.0.1:5000/hello_world
+    - run `./flarchitect run-debug test0`
+5. in your browser, navigate to http://127.0.0.1:5000/hello_world/YOUR_NAME_HERE

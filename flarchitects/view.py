@@ -11,8 +11,8 @@ import app_name
 # from app_name.authorization import *
 
 
-@app_name.app.route('/view_name', methods=['GET', 'POST'])
-def view_name():
+@app_name.app.route('/view_name/<string:name>', methods=['GET', 'POST'])
+def view_name(name):
 	# code goes here
-	context = {'greeting': 'hello world'}
+	context = {'greeting': 'hello ' + name}
 	return render_template('hello_world.html', **context)

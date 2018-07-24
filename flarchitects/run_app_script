@@ -1,6 +1,6 @@
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export FLASK_DEBUG=True
-export FLASK_APP=app_name
-export app_name_SETTINGS=config.py
+export FLASK_APP=app_name/app_name
+export app_name_SETTINGS=app_name/config.py
 flask run
