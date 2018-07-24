@@ -1,2 +1,2 @@
 # flarchitect
-Quick and easy micro python-flask project creation
+Quick and easy python-flask project creation
