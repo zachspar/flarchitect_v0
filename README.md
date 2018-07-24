@@ -16,4 +16,4 @@ _Open new bash shell with pwd as_ `.../flarchitect/`
     - run  `./flarchitect create-env test`
 4. serve your flask app
     - run `./flarchitect run-debug test`
-5. in your browser, navigate to http://127.0.0.1:5000/
+5. in your browser, navigate to http://127.0.0.1:5000/hello_world
